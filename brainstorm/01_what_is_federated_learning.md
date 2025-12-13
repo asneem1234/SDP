@@ -1,5 +1,11 @@
 # Understanding Federated Learning: From Machine Learning to Distributed Intelligence
 
+Hey Vaishu and Yasaswini! 👋
+
+So before we dive into our research, let's brush up on **exactly what Federated Learning is**, what are all the **challenges** in this field, and most importantly - what are the **research gaps** we can work on.
+
+This is going to be detailed but super clear. By the end, we'll know where we can contribute!
+
 ---
 
 ## Part 1: Machine Learning Basics (The Foundation)
@@ -1162,39 +1168,82 @@ Model accuracy drops → ???
 
 ### Summary of Challenges
 
-| Challenge | Severity | Solved? | Impact on Our SDP |
-|-----------|----------|---------|-------------------|
-| 1. Communication Efficiency | High | Partial | Need to measure overhead |
-| 2. Non-IID Data | Critical | Partial | ✅ Our focus (Dirichlet) |
-| 3. System Heterogeneity | Medium | Partial | Simulated (skip for SDP) |
-| 4. Privacy Leakage | High | Partial | Use differential privacy? |
-| 5. Byzantine Attacks | Critical | Partial | ✅ Our focus (gradient fingerprinting) |
-| 6. Security vs Privacy | Critical | Open | ✅ Our challenge! |
-| 7. Model Convergence | Medium | Partial | Monitor in experiments |
-| 8. Fairness | Medium | Partial | Future work |
-| 9. Client Dropout | Low | Solved | Simulated environment (skip) |
-| 10. Incentives | Low | Partial | Out of scope |
-| 11. Scalability | High | Partial | Test with 10/50/100 clients |
-| 12. Debugging | Low | Open | Document carefully |
+| Challenge | Severity | Solved? | Research Opportunity? |
+|-----------|----------|---------|----------------------|
+| 1. Communication Efficiency | High | Partial | ✅ Yes - need better compression |
+| 2. Non-IID Data | Critical | Partial | ✅ Yes - new aggregation methods |
+| 3. System Heterogeneity | Medium | Partial | Maybe - adaptive algorithms |
+| 4. Privacy Leakage | High | Partial | ✅ Yes - stronger guarantees needed |
+| 5. Byzantine Attacks | Critical | Partial | ✅ Yes - especially with encryption! |
+| 6. Security vs Privacy | Critical | Open | ✅ YES! Major research gap |
+| 7. Model Convergence | Medium | Partial | Yes - better theory needed |
+| 8. Fairness | Medium | Partial | Yes - algorithmic fairness |
+| 9. Client Dropout | Low | Solved | No - already handled well |
+| 10. Incentives | Low | Partial | Maybe - economics focus |
+| 11. Scalability | High | Partial | ✅ Yes - hierarchical systems |
+| 12. Debugging | Low | Open | Maybe - need tools |
 
 ---
 
-## Conclusion
+## Conclusion: Where We Can Contribute
 
-**What We Learned:**
+**What We've Learned:**
 
-1. **Traditional ML:** Centralize all data → Train model → Privacy violation
-2. **Federated Learning:** Keep data local → Share only model updates → Privacy preserved
-3. **Advantages:** Privacy, legal compliance, bandwidth efficiency, scalability, fresh data, diversity
-4. **Challenges:** 12 major challenges, especially Non-IID data and Byzantine attacks
-
-**For Our SDP:**
-- We focus on **Challenge 5 (Byzantine Attacks)** + **Challenge 2 (Non-IID Data)**
-- Using **gradient fingerprinting** + **Post-Quantum Cryptography**
-- This addresses the **Security vs Privacy trade-off (Challenge 6)**
-
-**Next Steps:** Read 02_post_quantum_cryptography_basics.md to understand WHY we need quantum-safe cryptography in FL!
+1. **Traditional ML:** Centralize all data → Train model → Privacy violation ❌
+2. **Federated Learning (2016):** Keep data local → Share only model updates → Privacy preserved ✅
+3. **6 Major Advantages:** Privacy, legal compliance, bandwidth efficiency, scalability, fresh data, diversity
+4. **12 Major Challenges:** Especially Non-IID data, Byzantine attacks, and the Security vs Privacy trade-off
 
 ---
 
-*End of Document*
+**The Research Gaps:**
+
+Looking at all these challenges, here's what's **still unsolved**:
+
+**Gap 1: Byzantine-Robust FL with Encryption** (Security vs Privacy Challenge)
+- **Problem:** To detect Byzantine attacks, we need to see gradients. But privacy requires encrypting gradients. These conflict!
+- **Current situation:** Either you have security OR privacy, not both well
+- **What's needed:** Defense mechanisms that work even when updates are encrypted
+
+**Gap 2: Post-Quantum Cryptography for FL**
+- **Problem:** Current encryption (RSA, ECC) will be broken by quantum computers (10-15 years)
+- **Current situation:** Very few papers on quantum-safe FL
+- **What's needed:** Integrate post-quantum crypto (like Kyber, Dilithium) into FL systems
+
+**Gap 3: Efficient PQC Secure Aggregation**
+- **Problem:** Secure aggregation protocols use Diffie-Hellman (quantum-vulnerable)
+- **Current situation:** Only 1 paper (Chen et al. 2024) addresses this
+- **What's needed:** Replace DH with quantum-safe alternatives
+
+**Gap 4: Byzantine Defenses for Non-IID**
+- **Problem:** Most Byzantine defenses assume IID data. Non-IID breaks them.
+- **Current situation:** Defenses either work for IID or Non-IID, not both
+- **What's needed:** Robust defenses that handle heterogeneous data
+
+---
+
+**My Thoughts:**
+
+So we have these research gaps, and I know **sir mentioned needing something related to cryptography**, right? 
+
+If we look at **Gap 1 + Gap 2** → That's the sweet spot! We can work on:
+- **Byzantine-robust Federated Learning** (Challenge 5)
+- **With Post-Quantum Cryptography** (Gap 2)  
+- **Under Non-IID Data** (Challenge 2)
+
+This combines:
+- ✅ Cryptography (sir's requirement - PQC is cutting-edge crypto!)
+- ✅ Security (Byzantine attacks - malicious clients)
+- ✅ Privacy (encryption while defending)
+- ✅ Practical problem (Non-IID is real-world scenario)
+
+**Plus:** Very few papers combine Byzantine defense + PQC + Non-IID together. So there's novelty potential!
+
+What do you both think? Should we explore this direction? It checks all the boxes and addresses real research gaps!
+
+Let me know your thoughts, and we can start looking at **what exactly Post-Quantum Cryptography is** (that's the next file - 02_post_quantum_cryptography_basics.md).
+
+---
+
+*Looking forward to discussing! 🚀*  
+*- Asneem*
