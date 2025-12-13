@@ -47,6 +47,7 @@ This document identifies specific research gaps at the intersection of Federated
 
 #### Why It's Hard
 ```
+
 Classical Secure Aggregation:
 - ECC public key: 32 bytes
 - Ciphertext: 48 bytes
