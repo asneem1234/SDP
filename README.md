@@ -118,82 +118,156 @@ This file has all the technical details, comparison tables, security levels, etc
 
 ---
 
-### **brainstorm/03_federated_learning_challenges.md** (14,654 lines)
+### **brainstorm/02a_quantum_computing_and_pqc_algorithms.md** (~1,199 lines)
 
-**Now the real problems start lol.** This file goes DEEP into 10 major FL challenges:
+**Deep dive into quantum computing and PQC algorithms.**
 
-**Challenge 1: Communication Efficiency**
-- FL sends millions of parameters every round
-- Bandwidth = bottleneck
-- Solutions: Gradient compression, quantization, sparsification
+**Part 1: Quantum Computing Basics**
+- What is superposition? (Coin spinning = both heads & tails simultaneously)
+- What is entanglement? (Magic coins linked across distance)
+- Why exponential speedup? (3 qubits = all 8 states at once)
+- Decoherence problem (qubits are fragile, need -273°C)
 
-**Challenge 2: Non-IID Data** (This is what our paper focuses on)
-- IID = Independently and Identically Distributed (everyone has similar data)
-- Non-IID = Everyone has DIFFERENT data distributions
-- Example: Hospital A has mostly cancer patients, Hospital B has mostly diabetes patients
-- Makes the model training really unstable and slow to converge
-- We use **Dirichlet distribution** (α=0.5) to simulate this
+**Part 2: Shor's Algorithm - The RSA Killer**
+- How factoring works (91 = 7×13 is easy, 617-digit numbers are impossible)
+- Period-finding trick
+- RSA-2048: 300 trillion years classically → 8-10 hours with quantum! ❌
+- Breaks RSA, ECC, Diffie-Hellman
 
-**Challenge 3: Byzantine Attacks** (Also our focus!)
-- Malicious clients intentionally send poisoned updates to sabotage the model
-- Attack types:
-  - **Label flipping:** Change 7 to 1 in training data
-  - **Gradient scaling:** Multiply your update by 100× to dominate the aggregation
-  - **Backdoor attacks:** Make model misclassify specific inputs (like all images with a red square)
-- Hard to detect because updates are encrypted (privacy vs security trade-off!)
+**Part 3: Grover's Algorithm - The Search Speedup**
+- √N speedup for search
+- AES-128: 2^128 → 2^64 (INSECURE!)
+- AES-256: 2^256 → 2^128 (still safe) ✅
 
-**Challenge 4: Privacy vs Security**
-- FL wants privacy (encrypt everything)
-- But encryption hides Byzantine attacks
-- How do we detect attacks without seeing the raw data?
-- This is THE fundamental tension in FL
+**Part 4: PQC Algorithms (The Solutions)**
+- **Kyber-768** (encryption): 1,184 byte keys, lattice-based, NIST standard
+- **Dilithium-3** (signatures): 1,952 byte keys, lattice-based, NIST standard
+- **SPHINCS+** (hash-based): 7,856 bytes, slow but ultra-secure
+- **Classic McEliece** (code-based): 1.3 MB keys (impractical)
+- Full comparison table + why lattice crypto wins
 
-**Other challenges:** System heterogeneity (different devices, speeds), convergence guarantees, fairness, personalization, etc.
+**Part 5: How PQC Secures FL**
+- Security proofs (breaking Kyber = solving LWE = impossible)
+- Why quantum computers can't break lattice problems
+- Concrete FL example with 10-year timeline
 
-This file explains ALL the challenges with math, existing solutions, and what's still unsolved.
+**Part 6: 8 Major Challenges in PQC**
+1. Large keys (37× bigger) → bandwidth explosion
+2. Slower ops (2-14×) → battery drain
+3. Immaturity (only 8 years old vs RSA's 48) → unknown attacks possible
+4. Implementation complexity → side-channel vulnerabilities
+5. Slow deployment → industry inertia
+6. Patents → legal uncertainty
+7. Timeline uncertainty → when to migrate?
+8. **PQC Secure Aggregation** → No good solution yet! (Our research gap)
 
----
-
-### **brainstorm/04_research_gaps_and_opportunities.md** (19,139 lines)
-
-**This is where it gets interesting.** This file identifies what's NOT been solved yet - the research opportunities!
-
-**Gap 1: Efficient PQC Secure Aggregation** (HIGHEST PRIORITY)
-- Current secure aggregation (Bonawitz et al. 2017) uses Diffie-Hellman key exchange
-- Problem: DH is NOT quantum-safe (quantum computer breaks it)
-- What we need: Replace DH with Kyber or other PQC
-- **Only 1 paper exists on this** (Chen et al. 2024) - field is wide open!
-- This is the REAL novel contribution we should be making
-
-**What's Secure Aggregation?**
-- Not just encrypting communication
-- Clients collaboratively hide their individual updates
-- Server only sees the SUM, never individual updates
-- Much stronger privacy guarantee
-- We're NOT doing this currently (we're just encrypting with Kyber)
-
-**Gap 2: PQC Homomorphic Encryption for FL**
-- Encryption that allows math operations on encrypted data
-- Server can aggregate without decrypting
-- Current homomorphic schemes don't have PQC versions
-
-**Gap 3: Communication-Efficient PQC**
-- Kyber keys are 37× bigger than ECC
-- Makes FL impractical at scale (1000+ clients)
-- Need: Compact PQC with <200 byte keys
-
-**The timeline:**
-- Year 1: Design PQC secure aggregation protocol
-- Year 2: Implement and optimize
-- Year 3: Comprehensive evaluation and write thesis
-
-This file has the full research roadmap if we want to do PhD-level work.
+**Includes 2 video resources at the end**
 
 ---
 
-### **brainstorm/05_paper_discussion_byzantine_robust_fl.md**
+### **brainstorm/03_choosing_our_research_direction.md** (~489 lines) ⭐ **READ THIS**
 
-**OK so this is the IMPORTANT one.** I need you both to read this carefully because it's honest feedback about our current paper.
+**DECISION TIME!** This is where we figure out what to actually work on.
+
+**The Brutal Truth:**
+- FL is NOT perfect (12 challenges)
+- PQC is NOT perfect (8 challenges)
+- Byzantine defenses are NOT perfect (accuracy loss, no guarantees)
+
+**The Major Trade-offs:**
+1. **Security vs Privacy vs Efficiency** (Can only pick 2!)
+2. **PQC Security vs Bandwidth** (37× larger keys)
+3. **Byzantine Defense vs Accuracy** (7% accuracy drop)
+4. **Research Depth vs 4-Month Timeline** (What's realistic?)
+
+**4 Options with Full Analysis:**
+
+**Option 1: Byzantine + PQC** ✅ **RECOMMENDED**
+- Combine Byzantine-robust FL with PQC without exploding communication
+- Realistic for 4 months (Path B)
+- Novel (nobody's done this efficiently)
+- Satisfies crypto requirement
+- Clear 16-week plan included
+
+**Option 2: Compact PQC**
+- Design smaller keys specifically for FL
+- ⚠️ Too math-heavy for 4 months
+- PhD-level difficulty
+
+**Option 3: Byzantine + Non-IID**
+- Byzantine defense that works with Non-IID data
+- ❌ No cryptography component (doesn't satisfy requirement)
+
+**Option 4: Privacy + Byzantine**
+- Detect attacks while preserving privacy
+- ❌ Unsolved research problem, impossible in 4 months
+
+**Includes:**
+- Detailed trade-off analysis
+- Concrete 16-week timeline for Option 1
+- Discussion questions to help decide
+- Risk assessment for each option
+
+**THIS FILE HELPS US DECIDE WHAT TO WORK ON!**
+
+---
+
+### **brainstorm/03_choosing_our_research_direction.md** (~489 lines) ⭐ **READ THIS**
+
+**DECISION TIME!** This is where we figure out what to actually work on.
+
+**The Brutal Truth:**
+- FL is NOT perfect (12 challenges)
+- PQC is NOT perfect (8 challenges)
+- Byzantine defenses are NOT perfect (accuracy loss, no guarantees)
+
+**The Major Trade-offs:**
+1. **Security vs Privacy vs Efficiency** (Can only pick 2!)
+2. **PQC Security vs Bandwidth** (37× larger keys)
+3. **Byzantine Defense vs Accuracy** (7% accuracy drop)
+4. **Research Depth vs 4-Month Timeline** (What's realistic?)
+
+**4 Options with Full Analysis:**
+
+**Option 1: Byzantine + PQC** ✅ **RECOMMENDED**
+- Combine Byzantine-robust FL with PQC without exploding communication
+- Realistic for 4 months (Path B)
+- Novel (nobody's done this efficiently)
+- Satisfies crypto requirement
+- Clear 16-week plan included
+
+**Option 2: Compact PQC**
+- Design smaller keys specifically for FL
+- ⚠️ Too math-heavy for 4 months
+- PhD-level difficulty
+
+**Option 3: Byzantine + Non-IID**
+- Byzantine defense that works with Non-IID data
+- ❌ No cryptography component (doesn't satisfy requirement)
+
+**Option 4: Privacy + Byzantine**
+- Detect attacks while preserving privacy
+- ❌ Unsolved research problem, impossible in 4 months
+
+**Includes:**
+- Detailed trade-off analysis
+- Concrete 16-week timeline for Option 1
+- Discussion questions to help decide
+- Risk assessment for each option
+
+**THIS FILE HELPS US DECIDE WHAT TO WORK ON!**
+
+---
+
+### **brainstorm/05_paper_discussion_byzantine_robust_fl.md** ⚠️ **OPTIONAL - Advanced**
+
+**⚠️ NOTE:** This file discusses a previous paper draft and is NOT essential for getting started. Only read this if you want deep context on past work. **Skip this initially and focus on files 01, 02, 02a, and 03 first!**
+
+**What's in here (if you're curious later):**
+- Previous paper analysis: "Byzantine-Robust FL with PQC"
+- 10 issues identified with that approach
+- Why it lacked novelty
+- Path A/B/C discussion (now superseded by file 03)
 
 **What we have so far:**
 - Paper title: "Byzantine-Robust Federated Learning Under Non-IID Data: A Post-Quantum Three-Layer Defense"
@@ -261,9 +335,11 @@ Our paper **combines existing techniques without novel algorithmic contributions
 
 ---
 
-### **brainstorm/06_compact_pqc_for_federated_learning.md** (Just created - 60KB)
+### **brainstorm/06_compact_pqc_for_federated_learning.md** (~60KB) ⚠️ **OPTIONAL - Very Advanced**
 
-**This explains WHY current PQC is a problem for FL at scale.**
+**⚠️ NOTE:** This is PhD-level deep dive into lattice mathematics and compact PQC design. **NOT required for our 4-month SDP!** Only read if you have deep interest in cryptography theory or are considering Option 2 from file 03. **Definitely skip this initially!**
+
+**What's in here (if you're very interested):**
 
 **The memory/communication problem:**
 - Kyber-768 has 1,184-byte public keys
@@ -352,16 +428,20 @@ Since we have **4 months** (not 6-12), I think **Path B is most realistic:**
 ### **Week 1 Tasks:**
 
 **Vaishu:**
-1. Read this README completely
-2. Read **01_what_is_federated_learning.md** (at least first 50 pages to understand FedAvg)
-3. Read **05_paper_discussion_byzantine_robust_fl.md** (THE MOST IMPORTANT - understand the 10 issues)
-4. Think: Which Path (A/B/C) makes sense for you? What are your goals?
+1. Read this README completely ✅
+2. Read **01_what_is_federated_learning.md** (understand FL fundamentals + all 12 challenges) ✅
+3. Read **02_post_quantum_cryptography_basics.md** (why PQC is needed) ✅
+4. Read **03_choosing_our_research_direction.md** (understand our 4 options) ✅
+5. Think: Which option (1-4) makes sense? What are your goals?
+6. *(Optional: 02a for quantum deep dive, 05 for paper context)*
 
 **Yasaswini:**
-1. Read this README completely
-2. Read **02_post_quantum_cryptography_basics.md** (focus on Kyber-512 section, understand why PQC is needed)
-3. Read **05_paper_discussion_byzantine_robust_fl.md** (same, understand the issues)
-4. Think: Are you more interested in ML/FL side or crypto/security side?
+1. Read this README completely ✅
+2. Read **01_what_is_federated_learning.md** (FL fundamentals) ✅
+3. Read **02_post_quantum_cryptography_basics.md** (crypto fundamentals + quantum threat) ✅
+4. Read **03_choosing_our_research_direction.md** (our decision point!) ✅
+5. Think: Which option resonates? ML/FL side or crypto/security side?
+6. *(Optional: 02a for algorithms deep dive, 05 for paper discussion)*
 
 **All of us:**
 - Schedule team meeting (2-3 hours) by end of Week 1
@@ -476,14 +556,20 @@ Looking forward to our meeting! 🚀
 
 ---
 
-**P.S.** Don't try to read all 6 files in one sitting lol. Start with:
-1. This README (you're already reading it!)
-2. 05_paper_discussion (the critical one)
-3. 01_what_is_federated_learning (the foundation)
+**P.S.** Reading order (essential files only):
+1. This README (you're reading it!) ✅
+2. **01_what_is_federated_learning.md** (foundation - ML → FL → challenges) ✅
+3. **02_post_quantum_cryptography_basics.md** (crypto basics + quantum threat) ✅
+4. **03_choosing_our_research_direction.md** (DECISION TIME - pick our path) ✅
 
-Then we can discuss and go from there.
+That's it! Those 4 files are all you need to get started.
 
-**P.P.S.** The 06_compact_pqc file is like 60KB and super technical - that's optional/future reading. Not critical for our 4-month SDP.
+**P.P.S.** Files 02a, 05, and 06 are **optional** and NOT required for initial understanding:
+- **02a:** Quantum computing + PQC algorithms deep dive (good for technical depth, but 03 covers what you need)
+- **05:** Previous paper discussion (outdated context - file 03 supersedes this)
+- **06:** Compact PQC mathematics (PhD-level, only relevant if choosing Option 2)
+
+**Focus on the 4 essentials first!** (README + 01 + 02 + 03) We can discuss advanced topics later if needed.
 
 ---
 
