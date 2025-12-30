@@ -1,7 +1,64 @@
 # Novel PQC + Federated Learning Research Ideas
 
-> **Last Updated:** December 22, 2025  
+> **Last Updated:** December 30, 2025  
 > **Status:** Brainstorming / Potential Research Directions
+
+---
+
+## 🚨 Major Challenges in PQC + FL
+
+### 1️⃣ Communication overhead (Key & ciphertext size)
+
+**The Problem:**
+- PQC keys/signatures are significantly larger than RSA/ECC
+- FL has many clients × many rounds
+
+**Why major:**
+👉 Directly affects scalability and training time.
+
+---
+
+### 2️⃣ Computation overhead on edge devices
+
+**The Problem:**
+- Lattice-based PQC requires heavy math
+- Edge devices are resource-constrained
+
+**Why major:**
+👉 Causes latency, battery drain, and client dropout.
+
+---
+
+### 3️⃣ PQC-compatible secure aggregation
+
+**The Problem:**
+- Existing secure aggregation assumes classical crypto
+- Naive replacement breaks privacy or efficiency
+
+**Why major:**
+👉 Secure aggregation is central to FL privacy.
+
+---
+
+### 4️⃣ Long-term privacy (Harvest-now-decrypt-later)
+
+**The Problem:**
+- FL updates are stored long-term
+- Classical crypto fails against future quantum attacks
+
+**Why major:**
+👉 Breaks the core privacy promise of FL.
+
+---
+
+### 5️⃣ Client heterogeneity
+
+**The Problem:**
+- Devices vary widely in compute, power, and network
+- Uniform PQC policies exclude weaker clients
+
+**Why major:**
+👉 Impacts fairness, participation, and model quality.
 
 ---
 
